@@ -11,7 +11,10 @@ public class DbConnectionUtil {
     private String password="sujata";
 
 
-    public Connection getConnection() {
+
+
+
+    public Connection getDbConnection() {
         Connection con = null;
         try {
 
@@ -22,7 +25,6 @@ public class DbConnectionUtil {
 
         return con;
     }
-
 }
 
 

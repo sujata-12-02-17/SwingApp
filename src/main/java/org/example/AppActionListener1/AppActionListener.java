@@ -26,11 +26,23 @@ public class AppActionListener implements ActionListener {
 
             new JDialog(frame, "Add clicked", true);
         }
+        if (action.equalsIgnoreCase("reset")) {
+
+            System.out.println("cancel button Clicked");
+
+        }
     }
+}
 
 
 
 
 
 
-    }
+
+
+
+
+
+
+
