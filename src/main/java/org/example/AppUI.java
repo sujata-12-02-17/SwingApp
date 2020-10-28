@@ -4,12 +4,15 @@ import org.example.Util.DbConnectionUtil;
 import org.example.model.Student;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppUI {
     JFrame frame1 = new JFrame("message");
@@ -101,26 +104,39 @@ public class AppUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Connection con = dbUtil.getDbConnection();
+
+                List<Student> students = new ArrayList<Student>();
+                Student student;
                 if(con!=null){
                     try{
-                    Statement st= con.createStatement();
+                        Statement st= con.createStatement();
                         ResultSet rs = st.executeQuery("SELECT * from student");
-
-                        while (rs.next()) {
-                            students[]rs.getString(1);
-                            rs.getString(2);
-                            rs.getString(3);
-                            rs.getString(4);
-                            rs.getString(5);
-
-
-
+                        while (rs.next()){
+                            student= new Student(rs.getLong("id"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("gender"),rs.getString("branch"));
+                            students.add(student);
                         }
+
+
                         String column[]={"ID","FNAME","LNAME","GENDER","BRANCH"};
-                        //new JTable(column);
-                        jt.setBounds(30,40,200,300);
+                        jt= new JTable();
+                        DefaultTableModel defaultTableModel = new DefaultTableModel();
+                        defaultTableModel.setColumnIdentifiers(column);
+                        Object[] rowData = new Object[5];
+                        for(int i =0; i<students.size();i++){
+                            rowData[0]= students.get(i).getId();
+                            rowData[1]= students.get(i).getFname();
+                            rowData[2]= students.get(i).getLastName();
+                            rowData[3]= students.get(i).getGender();
+                            rowData[4]= students.get(i).getBranch();
+
+                            defaultTableModel.addRow(rowData);
+                        }
+                        jt.setModel(defaultTableModel);
+                        JPanel panel = new JPanel();
+                        panel.setLayout(new BorderLayout());
                         JScrollPane sp=new JScrollPane(jt);
-                        frame2.add(sp);
+                        panel.add(sp,BorderLayout.CENTER);
+                        frame2.setContentPane(panel);
                         frame2.setSize(300,400);
                         frame2.setVisible(true);
                         con.close();
